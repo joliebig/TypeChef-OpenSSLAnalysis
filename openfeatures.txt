@@ -597,7 +597,6 @@ __WATCOMC__
 __arch64__
 __arm
 __arm__
-__cplusplus
 __hpux
 __i386
 __i386__
