@@ -1,0 +1,6 @@
+*.dbg
+*.err
+*.interface
+*.o
+*.pi
+*.time
