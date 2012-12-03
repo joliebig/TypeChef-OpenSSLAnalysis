@@ -21,3 +21,6 @@ NOTES:
 - -UOPENSSL_NO_BIO
   fixes a lot of type errors, given a lot of definitions are missing for
   OPENSSL_NO_BIO being defined.
+- remove brackets from arguments in function definition
+  crypto/des/des.h (e.g., DES_ecb3_encrypt((i), ...
+                          DES_ecb3_encrypt(i, ...

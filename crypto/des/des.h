@@ -111,16 +111,16 @@ typedef struct DES_ks
 #define DES_PCBC_MODE	1
 
 #define DES_ecb2_encrypt(i,o,k1,k2,e) \
-	DES_ecb3_encrypt((i),(o),(k1),(k2),(k1),(e))
+	DES_ecb3_encrypt(i,o,k1,k2,k1,e)
 
 #define DES_ede2_cbc_encrypt(i,o,l,k1,k2,iv,e) \
-	DES_ede3_cbc_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(e))
+	DES_ede3_cbc_encrypt(i,o,l,k1,k2,k1,iv,e)
 
 #define DES_ede2_cfb64_encrypt(i,o,l,k1,k2,iv,n,e) \
-	DES_ede3_cfb64_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(n),(e))
+	DES_ede3_cfb64_encrypt(i,o,l,k1,k2,k1,iv,n,e)
 
 #define DES_ede2_ofb64_encrypt(i,o,l,k1,k2,iv,n) \
-	DES_ede3_ofb64_encrypt((i),(o),(l),(k1),(k2),(k1),(iv),(n))
+	DES_ede3_ofb64_encrypt(i,o,l,k1,k2,k1,iv,n)
 
 OPENSSL_DECLARE_GLOBAL(int,DES_check_key);	/* defaults to false */
 #define DES_check_key OPENSSL_GLOBAL_REF(DES_check_key)
