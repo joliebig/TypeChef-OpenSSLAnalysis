@@ -24,3 +24,6 @@ NOTES:
 - remove brackets from arguments in function definition
   crypto/des/des.h (e.g., DES_ecb3_encrypt((i), ...
                           DES_ecb3_encrypt(i, ...
+- select OPENSSL_NO_DES or NO_MD5CRYPT_1
+  otherwise triggers an error fputs not found due to missing <stdio.h>
+  add macro OPENSSL_EXIT cannot be resolved
