@@ -1,0 +1,8 @@
+#!/bin/bash
+make clean
+find . -type f -name "*.pi" -exec rm {}  \;
+find . -type f -name "*.dbg" -exec rm {} \;
+find . -type f -name "*.err" -exec rm {} \;
+find . -type f -name "*.time" -exec rm {} \;
+find . -type f -name "*.interface" -exec rm {} \;
+

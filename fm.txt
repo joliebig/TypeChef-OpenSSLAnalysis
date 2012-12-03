@@ -1,0 +1,1 @@
+oneOf(defined(DES_RISC1),definedEx(DES_RISC2))

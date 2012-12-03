@@ -1,0 +1,55 @@
+#!/bin/bash
+
+echo ""
+echo ""
+echo "-=== ALL PARAMS ===-"
+echo $@
+echo ""
+echo ""
+echo "-=== FILTERED PARAMS ===-"
+FILTEREDPARAMS=`/local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/filterargs $@`
+FNAME=`/local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/filtername $@`
+
+echo $FILTEREDPARAMS
+
+echo ""
+echo ""
+/usr/bin/gcc $@
+
+
+# run typechef only in case we have a c file
+if [[ -n $FNAME ]];
+then
+	# set output files
+	outBase="$(dirname $FNAME)/$(basename $FNAME .c)"
+	outDbg="$outBase.dbg"
+	outPartialPreproc="$outBase.pi"
+	outErr="$outBase.err"
+	outTime="$outBase.time"
+
+	/local/joliebig/TypeChef/typechef.sh \
+		--bdd \
+		-I /usr/local/include \
+		-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed \
+		-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include \
+		-I /usr/include/x86_64-linux-gnu \
+		-I /usr/include \
+		-D"_BITS_STDIO_LOCK_H" \
+		-U"OPENSSL_NO_BIO" \
+		-U"_LIBC" \
+		--platfromHeader    /local/joliebig/TypeChef/host/platform.h \
+		--openFeat          /local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/openfeatures.txt \
+		--featureModelFExpr /local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/fm.txt \
+		--writePI $FILTEREDPARAMS \
+		2> "$outErr" | tee "$outDbg"
+
+	cat $outErr
+fi
+
+echo ""
+echo ""
+
+##	-I /usr/local/include \
+##	-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed \
+##	-I /usr/include/x86_64-linux-gnu \
+##	-I /usr/include \

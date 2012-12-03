@@ -1,0 +1,109 @@
+#!/usr/bin/python
+import argparse
+import os
+
+
+### specific action for storing defines and undefines.
+### since the order is important we store option argument
+### and option value together as a tuple.
+class UDAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if namespace.u_define is None:
+            setattr(namespace, 'u_define', [])
+        previous = namespace.u_define
+        previous.append((option_string, values))
+        setattr(namespace, 'u_define', previous)
+
+parser = argparse.ArgumentParser(
+    description='parse c-compiler options and return interesting options')
+
+### interesting compiler arguments
+parser.add_argument('-I', dest='includedir', action='append',
+                  help='include directory dir')
+parser.add_argument('-o', dest='outputfile',
+                  help='output file')
+parser.add_argument('-D', '-U', dest='u_define', action=UDAction,
+                  help='(un-)defined cpp values')
+parser.add_argument('--sysroot', dest='sysroot',
+                  help='logical root directory for headers and libraries')
+
+parser.add_argument('files', metavar='FILES', nargs='+',
+                  help='input files')
+
+
+### un-interesting compiler arguments
+parser.add_argument('-W', dest='warnings', action='append',
+                  help='compiler warning')
+parser.add_argument('-O', dest='optimizationlevel',
+                  help='optimization level')
+parser.add_argument('-c', dest='nolinker', action='store_true',
+                  help='no linker invocation flag')
+parser.add_argument('-pedantic', dest='pedantic', action='store_true',
+                  help='pedantic flag')
+parser.add_argument('-std', dest='standard',
+                  help='used C standard')
+parser.add_argument('-ansi', dest='ansi',
+                  help='use ansi standard')
+parser.add_argument('-E', dest='nopreprocessing',
+                  help='deactivate preprocessing')
+parser.add_argument('-S', dest='noassembling',
+                  help='deactivate assembling')
+parser.add_argument('-g', dest='debugging', action='append',
+                  help='debugging options')
+parser.add_argument('-pg', dest='profileinformation',
+                  help='write additional profile information for analysis programs')
+parser.add_argument('-f', dest='statistic', action='append',
+                  help='compiler statistics')
+parser.add_argument('-L', dest='libarydir',
+                  help='add library dir')
+parser.add_argument('-l', dest='library',
+                  help='add library')
+parser.add_argument('-m', dest='machineoption', action='append',
+                  help='machine dependent option')
+parser.add_argument('-v', dest='verbose',
+                  help='verbosity')
+parser.add_argument('-###', dest='verbose',
+                  help='verbosity')
+parser.add_argument('-help', dest='help',
+                  help='show help text')
+parser.add_argument('-version', dest='version',
+                  help='show version')
+parser.add_argument('-target-help', dest='targethelp',
+                  help='target-specific help')
+parser.add_argument('-pipe', dest='pipe',
+                  help='use pipes instead of temporary files')
+parser.add_argument('-no-canonical-prefixes', dest='nocanonicalprefixes',
+                  help='do not expand ../ and others to get absolut paths')
+parser.add_argument('-wrapper', dest='wrapper',
+                  help='use wrapper for subprograms')
+parser.add_argument('-aux-info', dest='auxinfo',
+                  help='aux info')
+parser.add_argument('-trigraphs', dest='trigraphs',
+                  help='support iso c trigraphs')
+parser.add_argument('-no-integrated-cpp', dest='nointegratedcpp',
+                  help='allows user supplied "cc1"')
+parser.add_argument('-traditional', '-traditional-cpp', dest='tradditional',
+                  help='emulate pre-standard C compiler')
+parser.add_argument('-B', dest='compilerexecutables',
+                  help='folder with compiler executables')
+parser.add_argument('-specs', dest='specs',
+                  help='file with compiler specs')
+
+args = parser.parse_args()
+fargs = ''
+
+# order of parameters according to gcc manpage
+# include directories
+if (args.includedir):
+    for i in args.includedir: fargs = fargs + '-I %s ' % i
+
+# (un-)defined cpp values
+if (args.u_define):
+    for (o,v) in args.u_define: fargs = fargs + '%s %s ' % (o,v)
+
+# filter out files that do not have the extension '.c'
+for f in args.files:
+    if os.path.splitext(f)[1] == '.c':
+        fargs = fargs + ' %s ' % f
+
+print fargs
