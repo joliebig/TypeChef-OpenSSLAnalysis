@@ -506,7 +506,7 @@ err:
 
 int MAIN(int argc, char **argv)
 	{
-	fputs("Program not available.\n", stderr)
+	fputs("Program not available.\n", stderr);
 	OPENSSL_EXIT(1);
 	}
 #endif
