@@ -12,6 +12,8 @@ FNAME=`/local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/filtername $@`
 
 echo $FILTEREDPARAMS
 
+echo "srcdir: " $HERE
+
 echo ""
 echo ""
 /usr/bin/gcc $@
@@ -37,6 +39,11 @@ then
 		-D"_BITS_STDIO_LOCK_H" \
 		-U"OPENSSL_NO_BIO" \
 		-U"_LIBC" \
+		-U"DTLS1_AD_MISSING_HANDSHAKE_MESSAGE" \
+		-U"NO_WINDOWS_BRAINDEATH" \
+		-U"OPENSSLDIR" \
+		-U"WSAAPI" \
+		-U"EVP_CHECK_DES_KEY" \
 		--platfromHeader    /local/joliebig/TypeChef/host/platform.h \
 		--openFeat          /local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/openfeatures.txt \
 		--featureModelFExpr /local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/fm.txt \

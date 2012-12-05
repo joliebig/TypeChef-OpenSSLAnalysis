@@ -27,3 +27,7 @@ NOTES:
 - select OPENSSL_NO_DES or NO_MD5CRYPT_1
   otherwise triggers an error fputs not found due to missing <stdio.h>
   add macro OPENSSL_EXIT cannot be resolved
+- DTLS1_AD_MISSING_HANDSHAKE_MESSAGE, NO_WINDOWS_BRAINDEATH, OPENSSLDIR
+  hold a string value and need to be undefined here
+- WSAAPI needs to be undefined for non-windows systems
+- EVP_CHECK_DES_KEY needs to be undefined; I'm not sure why (TODO)!
