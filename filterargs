@@ -101,9 +101,4 @@ if (args.includedir):
 if (args.u_define):
     for (o,v) in args.u_define: fargs = fargs + '%s %s ' % (o,v)
 
-# filter out files that do not have the extension '.c'
-for f in args.files:
-    if os.path.splitext(f)[1] == '.c':
-        fargs = fargs + ' %s ' % f
-
 print fargs

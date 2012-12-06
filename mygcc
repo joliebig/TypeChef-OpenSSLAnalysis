@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ABSPATH=$(cd "$(dirname "$0")"; pwd)
+
 echo ""
 echo ""
 echo "-=== ALL PARAMS ===-"
@@ -7,12 +9,11 @@ echo $@
 echo ""
 echo ""
 echo "-=== FILTERED PARAMS ===-"
-FILTEREDPARAMS=`/local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/filterargs $@`
-FNAME=`/local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/filtername $@`
+FILTEREDPARAMS=`$ABSPATH/filterargs $@`
+FNAME=`$ABSPATH/filtername $@`
+
 
 echo $FILTEREDPARAMS
-
-echo "srcdir: " $HERE
 
 echo ""
 echo ""
@@ -29,25 +30,20 @@ then
 	outErr="$outBase.err"
 	outTime="$outBase.time"
 
-	/local/joliebig/TypeChef/typechef.sh \
+	# TypeChef resides next to TypeChef-<projectname> two levels up
+	$ABSPATH/../../TypeChef/typechef.sh \
 		--bdd \
 		-I /usr/local/include \
 		-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed \
 		-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include \
 		-I /usr/include/x86_64-linux-gnu \
 		-I /usr/include \
-		-D"_BITS_STDIO_LOCK_H" \
-		-U"OPENSSL_NO_BIO" \
-		-U"_LIBC" \
-		-U"DTLS1_AD_MISSING_HANDSHAKE_MESSAGE" \
-		-U"NO_WINDOWS_BRAINDEATH" \
-		-U"OPENSSLDIR" \
-		-U"WSAAPI" \
-		-U"EVP_CHECK_DES_KEY" \
-		--platfromHeader    /local/joliebig/TypeChef/host/platform.h \
-		--openFeat          /local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/openfeatures.txt \
-		--featureModelFExpr /local/joliebig/TypeChef-OpenSSL/openssl-1.0.1c/fm.txt \
+		--platfromHeader    $ABSPATH/platform.h \
+		--openFeat          $ABSPATH/openfeatures.txt \
+		--featureModelFExpr $ABSPATH/fm.txt \
 		--writePI $FILTEREDPARAMS \
+		--include $ABSPATH/partial_configuration.h \
+		$FNAME \
 		2> "$outErr" | tee "$outDbg"
 
 	cat $outErr
