@@ -42,6 +42,7 @@ then
 		--openFeat          $ABSPATH/openfeatures.txt \
 		--featureModelFExpr $ABSPATH/fm.txt \
 		--writePI $FILTEREDPARAMS \
+		--typecheck \
 		--include $ABSPATH/partial_configuration.h \
 		$FNAME \
 		2> "$outErr" | tee "$outDbg"
