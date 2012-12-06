@@ -8,8 +8,9 @@ Steps for parsing OpenSSL:
    3.2 remove lines with ==,<=,>=,<,>,+,/
    3.3 remove duplicates
    3.4 remove __cplusplus (g++-specific)
-4. run make
-
+4. set paths to system headers; run `cpp -v` and add include paths
+   to mygcc script
+5. run make
 
 
 NOTES:
@@ -30,4 +31,6 @@ NOTES:
 - DTLS1_AD_MISSING_HANDSHAKE_MESSAGE, NO_WINDOWS_BRAINDEATH, OPENSSLDIR
   set standard value for string parameter; see partial_configuration.h
 - WSAAPI needs to be undefined for non-windows systems
+  see partial_configuration.h
 - EVP_CHECK_DES_KEY needs to be undefined; I'm not sure why (TODO)!
+  see partial_configuration.h
