@@ -34,3 +34,7 @@ NOTES:
   see partial_configuration.h
 - EVP_CHECK_DES_KEY needs to be undefined; I'm not sure why (TODO)!
   see partial_configuration.h
+
+A lot of constraints have been added to partialconf.h. Among the constraints
+are setting of default values for macros (strings, numbers), undefs (causing
+#error) and parametrized macro definitions.
