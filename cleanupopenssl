@@ -5,4 +5,6 @@ find . -type f -name "*.dbg" -exec rm {} \;
 find . -type f -name "*.err" -exec rm {} \;
 find . -type f -name "*.time" -exec rm {} \;
 find . -type f -name "*.interface" -exec rm {} \;
+find . -type f -name "*.vaareport" -exec rm {} \;
+find . -type f -name "*.ser" -exec rm {} \;
 

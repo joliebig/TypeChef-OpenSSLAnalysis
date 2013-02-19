@@ -34,6 +34,27 @@ NOTES:
   see partial_configuration.h
 - EVP_CHECK_DES_KEY needs to be undefined; I'm not sure why (TODO)!
   see partial_configuration.h
+- !NO_TUNALA && OPENSSL_NO_BUFFER: #error
+- !DATA_ORDER_IS_BIG_ENDIAN && !DATA_ORDER_IS_LITTLE_ENDIAN: #error
+- HASH_??? elements in crypto/md32_common.h refer to parametrized macros; neglect them
+- crypto/rand/rand_lcl.h:
+  !USE_MD5_RAND                                     A 582
+  && !USE_SHA1_RAND                                 B 583
+  && !USE_MDC2_RAND                                 C 584
+  && !USE_MD2_RAND                                  D 585
+  && ! (!OPENSSL_NO_SHA && !OPENSSL_NO_SHA1)        E 316 F 318
+  && ! (!OPENSSL_NO_MD5)                            G 296
+  && ! (!OPENSSL_NO_MDC2 && !OPENSSL_NO_DES)        H 297 I 258
+  && ! (!OPENSSL_NO_MD2)                            J 294
+  : #error
+- crypto/sha/sha.h:
+  OPENSSL_NO_SHA || (OPENSSL_NO_SHA0 && OPENSSL_NO_SHA1): #error
+- tunala.h:
+  !HAVE_SELECT || !HAVE_SOCKET: #error
+- !(OPENSSL_SYS_UNIX || OPENSSL_SYS_WIN32 || OPENSSL_SYS_WINCE) && !OPENSSL_SYS_VMS: #error
+- !OPENSSL_SYS_VOS_HPPA && !OPENSSL_SYS_VOS_IA32: #error
+- NO_BUFFER || NO_IP || NO_OPENSSL: #error
+
 
 A lot of constraints have been added to partialconf.h. Among the constraints
 are setting of default values for macros (strings, numbers), undefs (causing

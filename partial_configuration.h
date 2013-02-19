@@ -1,5 +1,5 @@
 // set default values for several non-boolean macro-names
-#define __GNUC__ 2
+#define __GNUC__ 4
 
 #ifdef DTLS1_AD_MISSING_HANDSHAKE_MESSAGE
     #define DTLS1_AD_MISSING_HANDSHAKE_MESSAGE "anystring"
@@ -110,7 +110,6 @@
 // set default values for several "features"
 #define _BITS_STDIO_LOCK_H
 
-
 #undef OPENSSL_NO_AES
 #undef OPENSSL_NO_BIO
 #undef OPENSSL_NO_COMP
@@ -123,6 +122,7 @@
 #undef OPENSSL_NO_HEARTBEATS
 #undef OPENSSL_NO_HW
 #undef OPENSSL_NO_HW_UBSEC
+#undef OPENSSL_NO_MDC2
 #undef OPENSSL_NO_MD5
 #undef OPENSSL_NO_OCSP
 #undef OPENSSL_NO_POSIX_IO
@@ -148,6 +148,10 @@
 #undef KSSL_DEBUG
 #undef TLS_DEBUG
 
+
+// ./demos/tunala/tunala.h
+#define HAVE_SELECT
+#define HAVE_SOCKET
 
 // type error? variable undeclared
 // s_server.c total_bytes
@@ -200,3 +204,19 @@
 
 // Microsoft Compiler stuff
 #undef _MSC_VER
+
+// lexer error
+// openssl-1.0.1c/crypto/rand/rand_lcl.h +151
+#undef USE_MD2_RAND
+
+// type error
+// cms.c BUF_strdup
+#undef OPENSSL_NO_BUFFER
+
+// type error
+// dh_ameth.c dh
+#undef OPENSSL_NO_DH
+
+// type error
+// tasn_dec.c; unknown operation or incompatible types
+#undef ASN1_MAX_STRING_NEST
