@@ -8,9 +8,9 @@ Steps for parsing OpenSSL:
    3.2 remove lines with ==,<=,>=,<,>,+,/
    3.3 remove duplicates
    3.4 remove __cplusplus (g++-specific)
-4. set paths to system headers; run `cpp -v` and add include paths
-   to mygcc script
-5. run make
+4. set paths to system headers; run `cpp -v` and add include paths to mygcc script
+5. run "export CC=`pwd`/mygcc" in the shell and "make" afterwards
+6. add TypeChef parameters to mygcc script on demand (see typechef.sh for all available parameters)
 
 
 NOTES:
@@ -56,6 +56,4 @@ NOTES:
 - NO_BUFFER || NO_IP || NO_OPENSSL: #error
 
 
-A lot of constraints have been added to partialconf.h. Among the constraints
-are setting of default values for macros (strings, numbers), undefs (causing
-#error) and parametrized macro definitions.
+A lot of constraints have been added to partialconf.h. Among the constraints are setting of default values for macros (strings, numbers), undefs (causing #error) and parametrized macro definitions.

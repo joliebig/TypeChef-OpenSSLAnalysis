@@ -41,6 +41,7 @@ then
 		--platfromHeader    $ABSPATH/platform.h \
 		--openFeat          $ABSPATH/openfeatures.txt \
 		--featureModelFExpr $ABSPATH/fm.txt \
+		--typeSystemFeatureModelDimacs $ABSPATH/openssl.dimacs \
 		--writePI $FILTEREDPARAMS \
 		--typecheck \
 		--include $ABSPATH/partial_configuration.h \
