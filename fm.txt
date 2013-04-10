@@ -1,2 +1,2 @@
-oneOf(defined(DES_RISC1),definedEx(DES_RISC2))
+oneOf(defined(DES_RISC1),defined(DES_RISC2))
 oneOf(defined(OPENSSL_NO_DES),defined(NO_MD5CRYPT_1))
