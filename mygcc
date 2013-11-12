@@ -10,45 +10,90 @@ echo ""
 echo ""
 echo "-=== FILTERED PARAMS ===-"
 FILTEREDPARAMS=`$ABSPATH/filterargs $@`
-FNAME=`$ABSPATH/filtername $@`
+FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
 
 
 echo $FILTEREDPARAMS
+echo filename "$FNAME"
 
 echo ""
 echo ""
 /usr/bin/gcc $@
 
+# set output files
+outBase="$(dirname $FNAME)/$(basename $FNAME .c)"
+outDbg="$outBase.dbg"
+outPartialPreproc="$outBase.pi"
+outErr="$outBase.err"
+outTime="$outBase.time"
+
+# base parameters
+baseParam="
+	--bdd \
+	-I /usr/local/include \
+	-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed \
+	-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include \
+	-I /usr/include/x86_64-linux-gnu \
+	-I /usr/include \
+	--platfromHeader    $ABSPATH/platform.h \
+	--openFeat          $ABSPATH/openfeatures.txt \
+	--featureModelFExpr $ABSPATH/fm.txt \
+	--typeSystemFeatureModelDimacs $ABSPATH/openssl.dimacs \
+	--writePI $FILTEREDPARAMS \
+	--include $ABSPATH/partial_configuration.h \
+	--rootfolder /work/joliebig/"
 
 # run typechef only in case we have a c file
 if [[ -n $FNAME ]];
 then
-	# set output files
-	outBase="$(dirname $FNAME)/$(basename $FNAME .c)"
-	outDbg="$outBase.dbg"
-	outPartialPreproc="$outBase.pi"
-	outErr="$outBase.err"
-	outTime="$outBase.time"
 
 	# TypeChef resides next to TypeChef-<projectname> two levels up
-	$ABSPATH/../../TypeChef/typechef.sh \
-		--bdd \
-		-I /usr/local/include \
-		-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed \
-		-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include \
-		-I /usr/include/x86_64-linux-gnu \
-		-I /usr/include \
-		--platfromHeader    $ABSPATH/platform.h \
-		--openFeat          $ABSPATH/openfeatures.txt \
-		--featureModelFExpr $ABSPATH/fm.txt \
-		--typeSystemFeatureModelDimacs $ABSPATH/openssl.dimacs \
-		--writePI $FILTEREDPARAMS \
-		--typecheck \
-		--include $ABSPATH/partial_configuration.h \
-		$FNAME \
-		2> "$outErr" | tee "$outDbg"
+	# create the serialized AST in the first run
+	# apply sampling and family-based analysis for each strategy afterwards
+	# in a single run
+	$ABSPATH/../../TypeChef/typechefsampling.sh \
+		$baseParam \
+		--serializeAST \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
 
-	cat $outErr
+	$ABSPATH/../../TypeChef/typechefsampling.sh \
+		$baseParam \
+		--reuseAST \
+		--family \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
+
+	$ABSPATH/../../TypeChef/typechefsampling.sh \
+		$baseParam \
+		--reuseAST \
+		--singleconf \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
+
+	$ABSPATH/../../TypeChef/typechefsampling.sh \
+		$baseParam \
+		--reuseAST \
+		--pairwise \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
+
+	$ABSPATH/../../TypeChef/typechefsampling.sh \
+		$baseParam \
+		--reuseAST \
+		--codecoverage \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
+
+	$ABSPATH/../../TypeChef/typechefsampling.sh \
+		$baseParam \
+		--reuseAST \
+		--codecoveragenh \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
+
+	# create condensed report
+	find . -type f -name "$FNAME*.vaareport" | xargs cat > $FNAME.vaareportall
 fi
 
 echo ""
