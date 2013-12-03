@@ -54,46 +54,63 @@ then
 	$ABSPATH/../../TypeChef/typechefsampling.sh \
 		$baseParam \
 		--serializeAST \
-		$FNAME
+		$FNAME \
 		2> "$outErr" | tee -a "$outDbg"
+	mv $outErr `basename  $outErr .err`_parsing.err
+	mv $outDbg `basename  $outDbg .dbg`_parsing.dbg
 
 	$ABSPATH/../../TypeChef/typechefsampling.sh \
 		$baseParam \
 		--reuseAST \
 		--family \
-		$FNAME
+		$FNAME \
 		2> "$outErr" | tee -a "$outDbg"
+	mv $outErr `basename  $outErr .err`_family.err
+	mv $outDbg `basename  $outDbg .dbg`_family.dbg
 
 	$ABSPATH/../../TypeChef/typechefsampling.sh \
 		$baseParam \
 		--reuseAST \
 		--singleconf \
-		$FNAME
+		$FNAME \
 		2> "$outErr" | tee -a "$outDbg"
+	mv $outErr `basename  $outErr .err`_singleconf.err
+	mv $outDbg `basename  $outDbg .dbg`_singleconf.dbg
 
 	$ABSPATH/../../TypeChef/typechefsampling.sh \
 		$baseParam \
 		--reuseAST \
 		--pairwise \
-		$FNAME
+		$FNAME \
 		2> "$outErr" | tee -a "$outDbg"
+	mv $outErr `basename  $outErr .err`_pairwise.err
+	mv $outDbg `basename  $outDbg .dbg`_pairwise.dbg
 
 	$ABSPATH/../../TypeChef/typechefsampling.sh \
 		$baseParam \
 		--reuseAST \
 		--codecoverage \
-		$FNAME
+		$FNAME \
 		2> "$outErr" | tee -a "$outDbg"
+	mv $outErr `basename  $outErr .err`_codecoverage.err
+	mv $outDbg `basename  $outDbg .dbg`_codecoverage.dbg
 
 	$ABSPATH/../../TypeChef/typechefsampling.sh \
 		$baseParam \
 		--reuseAST \
 		--codecoveragenh \
-		$FNAME
+		$FNAME \
 		2> "$outErr" | tee -a "$outDbg"
+	mv $outErr `basename  $outErr .err`_codecoveragenh.err
+	mv $outDbg `basename  $outDbg .dbg`_codecoveragenh.dbg
 
 	# create condensed report
 	find . -type f -name "$FNAME*.vaareport" | xargs cat > $FNAME.vaareportall
+
+	# remove unnecessary files
+	bn=`basename $FNAME .c`
+	dn=`dirname $FNAME`
+	rm $dn/$bn.pi
 fi
 
 echo ""
